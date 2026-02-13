@@ -29,6 +29,11 @@ st.markdown("""
         line-height: 1.7 !important;
     }
     
+    /* Hide Share button and menu */
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    
     /* Headers */
     h1 {
         font-size: 2.5rem !important;
@@ -817,38 +822,12 @@ with tab7:
                 st.warning("⚠️ **Long-term use**: Monitor bone density and vitamin B12")
 
 # ========================================
-# Footer
+# Simple Footer - No blue boxes
 # ========================================
 st.markdown("---")
 
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.markdown("""
-    <div style='text-align: center; background-color: #E8F4F8; padding: 1.2rem; border-radius: 8px;'>
-        <h3 style='color: #2C5F8D; margin: 0; font-size: 1.3rem;'>📞 Medical Support</h3>
-        <p style='margin-top: 0.5rem; font-size: 1rem;'>Available 24/7</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown("""
-    <div style='text-align: center; background-color: #E8F4F8; padding: 1.2rem; border-radius: 8px;'>
-        <h3 style='color: #2C5F8D; margin: 0; font-size: 1.3rem;'>📚 References</h3>
-        <p style='margin-top: 0.5rem; font-size: 1rem;'>Updated 2024</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col3:
-    st.markdown("""
-    <div style='text-align: center; background-color: #E8F4F8; padding: 1.2rem; border-radius: 8px;'>
-        <h3 style='color: #2C5F8D; margin: 0; font-size: 1.3rem;'>⚕️ For Professionals</h3>
-        <p style='margin-top: 0.5rem; font-size: 1rem;'>Only</p>
-    </div>
-    """, unsafe_allow_html=True)
-
 st.markdown("""
-<div style='text-align: center; padding: 1.5rem; margin-top: 2rem; border-top: 2px solid #E8F4F8;'>
+<div style='text-align: center; padding: 1.5rem; margin-top: 2rem;'>
     <p style='color: #666; font-size: 0.95rem;'>
         ⚕️ <strong>This guide is for medical professionals only</strong><br>
         Prescription required for dispensing
