@@ -509,44 +509,47 @@ with tab5:
     st.markdown("---")
     
     st.warning("""
-    ## ⚠️ Moderate Interactions (Monitor)
+    ## ⚠️ Moderate Interactions (Monitor Closely)
     
     ### Drugs Requiring Monitoring:
     
     #### 1. Clopidogrel (Plavix):
-    - Vonoprazan may reduce effectiveness
-    - **Solution:** Use different acid suppressor or monitor closely
+    - **Evidence:** Vonoprazan reduces antiplatelet effect (Meta-analysis 2025)
+    - **Mechanism:** Unknown (NOT via CYP2C19 like PPIs)
+    - **Effect:** May reduce clopidogrel efficacy more than esomeprazole
+    - **Solution:** Monitor platelet function (VerifyNow assay) or use H2-blocker
     
-    #### 2. Methotrexate:
-    - May increase blood levels (toxicity risk)
-    - **Action:** Monitor methotrexate levels, reduce dose
+    #### 2. Clarithromycin (in triple therapy for H. pylori):
+    - **Evidence:** FDA Label 2024
+    - **Risk:** Serious cardiac arrhythmias (both inhibit CYP3A4)
+    - **Solution:** ECG monitoring during treatment
     
-    #### 3. Warfarin:
-    - May increase effect (bleeding risk)
-    - **Monitoring:** INR weekly initially
-    
-    #### 4. Digoxin:
-    - May increase levels
-    - **Monitoring:** Digoxin blood levels
-    
-    #### 5. Tacrolimus:
-    - May increase levels
-    - **Monitoring:** Tacrolimus levels
+    #### 3. Methotrexate:
+    - **Evidence:** FDA Label 2024 (weak evidence)
+    - **Effect:** May increase methotrexate levels
+    - **Solution:** Monitor levels in high-dose therapy only
     """)
     
     st.markdown("---")
     
     st.success("""
-    ## ✅ Minor Interactions (Safe)
+    ## ✅ Safe Combinations (No Significant Interactions)
     
-    ### Safe to Use:
+    ### Clinically Proven Safe:
     
-    ✅ Pain relievers (Paracetamol, Ibuprofen)  
-    ✅ Blood pressure medications (most)  
-    ✅ Diabetes medications (Metformin, Insulin)  
-    ✅ Antibiotics (most)  
-    ✅ Antihistamines  
-    ✅ Asthma medications  
+    ✅ **Warfarin** - No clinical evidence of interaction (unlike traditional PPIs)  
+    ✅ **Aspirin (low-dose)** - No effect on antiplatelet function  
+    ✅ **NSAIDs** - Safe (Ibuprofen, Diclofenac, Meloxicam)  
+    ✅ **Paracetamol** - No interactions  
+    ✅ **Blood pressure medications** - Most are safe  
+    ✅ **Diabetes medications** - Metformin, Insulin safe  
+    ✅ **Antibiotics** - Most are safe (except clarithromycin)  
+    ✅ **Antihistamines** - Safe  
+    ✅ **Asthma medications** - Safe
+    
+    ---
+    
+    **📘 Important Note:** Digoxin and Tacrolimus - No clinical evidence of significant interaction, but monitor levels as precaution if using high doses
     """)
     
     st.markdown("---")
@@ -563,6 +566,30 @@ with tab5:
     ---
     
     **Note:** This is a major advantage over traditional PPIs that must be taken on empty stomach
+    """)
+    
+    st.markdown("---")
+    
+    st.success("""
+    ## 🏆 Key Advantage Over Traditional PPIs
+    
+    ### Vonoprazan has FEWER Drug Interactions:
+    
+    **Why?** Vonoprazan does NOT significantly inhibit CYP2C19 enzyme (the main enzyme responsible for many drug interactions with PPIs)
+    
+    **Metabolized via:** CYP3A4 + SULT2A1 (different pathway)
+    
+    ### Comparison with Traditional PPIs:
+    
+    | Drug | Omeprazole/Esomeprazole | Vonoprazan |
+    |------|-------------------------|------------|
+    | **Warfarin** | ⚠️ May interact | ✅ No evidence |
+    | **Clopidogrel** | ⚠️ Via CYP2C19 | ⚠️ Different mechanism |
+    | **Digoxin** | ⚠️ Possible | ✅ No strong evidence |
+    | **Tacrolimus** | ⚠️ Possible | ✅ No strong evidence |
+    | **NSAIDs/Aspirin** | ✅ Safe | ✅ Safe |
+    
+    **📚 Sources:** FDA Label 2024, Meta-analysis 2025, PMC Review 2024
     """)
     
     st.markdown("---")
