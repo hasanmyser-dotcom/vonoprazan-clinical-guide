@@ -1,24 +1,23 @@
 import streamlit as st
 from datetime import datetime
 import base64
-from io import BytesIO
 
 # ========================================
-# إعدادات الصفحة
+# Page Configuration
 # ========================================
 st.set_page_config(
-    page_title="فونوبرازان - دليل طبي شامل",
+    page_title="Vonoprazan - Medical Guide",
     page_icon="💊",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # ========================================
-# CSS مخصص - تحسين الألوان والخطوط
+# Custom CSS - Professional Medical Design
 # ========================================
 st.markdown("""
 <style>
-    /* نظام ألوان طبي احترافي */
+    /* Professional medical color system */
     :root {
         --primary-color: #2C5F8D;
         --secondary-color: #4A90C9;
@@ -28,15 +27,15 @@ st.markdown("""
         --danger-color: #DC3545;
     }
     
-    /* تكبير الخطوط */
+    /* Base font sizing - slightly smaller */
     html, body, [class*="css"] {
-        font-size: 18px !important;
-        line-height: 1.8 !important;
+        font-size: 16px !important;
+        line-height: 1.7 !important;
     }
     
-    /* عناوين أكبر */
+    /* Headers */
     h1 {
-        font-size: 2.8rem !important;
+        font-size: 2.5rem !important;
         color: #2C5F8D !important;
         font-weight: 700 !important;
         margin-bottom: 1.5rem !important;
@@ -44,65 +43,89 @@ st.markdown("""
         padding: 1rem !important;
         background: linear-gradient(135deg, #E8F4F8 0%, #FFFFFF 100%) !important;
         border-radius: 10px !important;
-        border-right: 5px solid #2C5F8D !important;
+        border-left: 5px solid #2C5F8D !important;
     }
     
     h2 {
-        font-size: 2.2rem !important;
+        font-size: 2rem !important;
         color: #4A90C9 !important;
         font-weight: 600 !important;
         margin-top: 1.5rem !important;
         margin-bottom: 1rem !important;
-        padding-right: 1rem !important;
-        border-right: 4px solid #4A90C9 !important;
+        padding-left: 1rem !important;
+        border-left: 4px solid #4A90C9 !important;
     }
     
     h3 {
-        font-size: 1.8rem !important;
+        font-size: 1.6rem !important;
         color: #2C5F8D !important;
         font-weight: 600 !important;
         margin-top: 1rem !important;
     }
     
-    /* تحسين القوائم المنسدلة */
+    /* Tabs styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background-color: #F8F9FA;
+        padding: 0.5rem;
+        border-radius: 10px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        background-color: white;
+        border-radius: 8px;
+        padding: 0 24px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2C5F8D;
+        border: 2px solid transparent;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #2C5F8D 0%, #4A90C9 100%);
+        color: white !important;
+        border: 2px solid #2C5F8D;
+    }
+    
+    /* Expanders styling */
     .streamlit-expanderHeader {
-        font-size: 1.4rem !important;
+        font-size: 1.2rem !important;
         font-weight: 600 !important;
         color: #2C5F8D !important;
         background-color: #E8F4F8 !important;
         border-radius: 8px !important;
-        padding: 1rem !important;
-        border-right: 4px solid #4A90C9 !important;
+        padding: 0.8rem !important;
+        border-left: 4px solid #4A90C9 !important;
     }
     
     .streamlit-expanderHeader:hover {
         background-color: #D0E8F2 !important;
     }
     
-    /* محتوى القوائم المنسدلة */
     .streamlit-expanderContent {
-        font-size: 1.1rem !important;
-        padding: 1.5rem !important;
+        font-size: 1rem !important;
+        padding: 1.2rem !important;
         background-color: #FAFAFA !important;
         border-radius: 0 0 8px 8px !important;
     }
     
-    /* تحسين الجداول */
+    /* Tables */
     table {
-        font-size: 1.1rem !important;
+        font-size: 0.95rem !important;
         width: 100% !important;
     }
     
     th {
         background-color: #2C5F8D !important;
         color: white !important;
-        padding: 1rem !important;
-        font-size: 1.2rem !important;
+        padding: 0.8rem !important;
+        font-size: 1rem !important;
         font-weight: 600 !important;
     }
     
     td {
-        padding: 0.8rem !important;
+        padding: 0.7rem !important;
         border-bottom: 1px solid #E0E0E0 !important;
     }
     
@@ -110,18 +133,18 @@ st.markdown("""
         background-color: #F5F5F5 !important;
     }
     
-    /* تحسين الصناديق الملونة */
+    /* Alert boxes */
     .stAlert {
-        font-size: 1.1rem !important;
-        padding: 1.2rem !important;
+        font-size: 1rem !important;
+        padding: 1rem !important;
         border-radius: 8px !important;
-        border-right: 5px solid !important;
+        border-left: 5px solid !important;
     }
     
-    /* أزرار أكبر وأوضح */
+    /* Buttons */
     .stButton > button {
-        font-size: 1.3rem !important;
-        padding: 0.8rem 2rem !important;
+        font-size: 1.1rem !important;
+        padding: 0.7rem 1.8rem !important;
         border-radius: 8px !important;
         font-weight: 600 !important;
         transition: all 0.3s ease !important;
@@ -132,184 +155,171 @@ st.markdown("""
         box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
     }
     
-    /* تحسين الشريط الجانبي */
-    .css-1d391kg {
-        background-color: #F8F9FA !important;
-    }
-    
-    /* تحسين حقول الإدخال */
+    /* Input fields */
     .stTextInput > div > div > input,
     .stNumberInput > div > div > input,
     .stSelectbox > div > div > select {
-        font-size: 1.2rem !important;
-        padding: 0.8rem !important;
+        font-size: 1rem !important;
+        padding: 0.7rem !important;
         border-radius: 6px !important;
     }
     
-    /* تحسين القوائم المنسدلة للتبويبات */
-    .stRadio > div {
-        font-size: 1.2rem !important;
-    }
-    
-    /* تحسين الفواصل */
+    /* Dividers */
     hr {
-        margin: 2rem 0 !important;
+        margin: 1.5rem 0 !important;
         border: none !important;
         height: 2px !important;
-        background: linear-gradient(to left, transparent, #4A90C9, transparent) !important;
+        background: linear-gradient(to right, transparent, #4A90C9, transparent) !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # ========================================
-# دالة توليد PDF
+# PDF Download Function
 # ========================================
 def generate_pdf_content():
-    """توليد محتوى نصي كامل للتحميل"""
+    """Generate downloadable text content"""
     content = f"""
 ╔══════════════════════════════════════════════════════════════╗
-║           فونوبرازان - دليل طبي شامل                        ║
-║                  VONOPRAZAN                                  ║
+║              VONOPRAZAN - Complete Medical Guide             ║
 ╚══════════════════════════════════════════════════════════════╝
 
-تاريخ الإصدار: {datetime.now().strftime("%Y-%m-%d")}
+Generated: {datetime.now().strftime("%Y-%m-%d %H:%M")}
 
 ════════════════════════════════════════════════════════════════
-📌 المعلومات الأساسية
+BASIC INFORMATION
 ════════════════════════════════════════════════════════════════
 
-الاسم التجاري: فونوبرازان (Vonoprazan)
-المجموعة الدوائية: مثبطات مضخة البروتون التنافسية (P-CAB)
-الشركة المصنعة: Takeda Pharmaceuticals
-سنة الاعتماد: 2015 (اليابان)، 2022 (FDA)
+Generic Name: Vonoprazan
+Trade Names: Voquezna, Vocinti
+Drug Class: Potassium-Competitive Acid Blocker (P-CAB)
+Manufacturer: Takeda Pharmaceuticals
+Approval: 2015 (Japan), 2022 (FDA)
 
 ════════════════════════════════════════════════════════════════
-🔬 آلية العمل
+MECHANISM OF ACTION
 ════════════════════════════════════════════════════════════════
 
-• مثبط تنافسي لمضخة البروتون (K⁺-competitive acid blocker)
-• يرتبط مباشرة بمضخة H⁺/K⁺-ATPase
-• تثبيط سريع وطويل الأمد لإفراز الحمض
-• فعالية أكبر من PPIs التقليدية (أوميبرازول، لانسوبرازول)
-• لا يحتاج لتفعيل حمضي (يعمل فوراً)
+• Potassium-competitive acid blocker (P-CAB)
+• Direct binding to H+/K+-ATPase pump
+• Rapid and long-lasting acid suppression
+• More effective than traditional PPIs
+• No need for acid activation (works immediately)
 
 ════════════════════════════════════════════════════════════════
-💊 دواعي الاستعمال
+INDICATIONS
 ════════════════════════════════════════════════════════════════
 
-1. ارتجاع المريء (GERD) - خط علاجي أول
-2. قرحة المعدة والاثني عشر
-3. استئصال جرثومة المعدة (H. pylori) - مع المضادات الحيوية
-4. متلازمة زولينجر-إليسون
-5. الوقاية من قرح الإجهاد
+1. Gastroesophageal Reflux Disease (GERD)
+2. Gastric and Duodenal Ulcers
+3. H. pylori Eradication (with antibiotics)
+4. Zollinger-Ellison Syndrome
+5. Erosive Esophagitis
+6. Stress Ulcer Prophylaxis
 
 ════════════════════════════════════════════════════════════════
-⚕️ الجرعات
+DOSAGE
 ════════════════════════════════════════════════════════════════
 
-▶ ارتجاع المريء:
-  • الجرعة الأولية: 20 مجم مرة واحدة يومياً
-  • المدة: 4-8 أسابيع
-  • الصيانة: 10-20 مجم يومياً
+GERD:
+  Initial: 20 mg once daily
+  Duration: 4-8 weeks
+  Maintenance: 10-20 mg daily
 
-▶ استئصال جرثومة المعدة:
-  • 20 مجم مرتين يومياً
-  • مع: أموكسيسيلين 1000 مجم + كلاريثروميسين 500 مجم
-  • المدة: 7 أيام
+H. pylori Eradication:
+  20 mg twice daily
+  With: Amoxicillin 1000 mg + Clarithromycin 500 mg
+  Duration: 7 days
 
-▶ قرحة المعدة:
-  • 20 مجم مرة واحدة يومياً
-  • المدة: 8 أسابيع
-
-════════════════════════════════════════════════════════════════
-⚠️ التحذيرات
-════════════════════════════════════════════════════════════════
-
-• الحمل والرضاعة: استخدام بحذر (فئة C)
-• الفشل الكبدي: تقليل الجرعة
-• الفشل الكلوي: لا يحتاج تعديل جرعة
-• كبار السن: آمن بدون تعديل
-
-✅ التحذيرات طويلة الأمد (مشتركة مع جميع PPIs):
-• نقص المغنيسيوم: مراقبة مستويات المغنيسيوم كل 6 أشهر
-• نقص فيتامين B12: فحص سنوي للمستخدمين لأكثر من سنة
-• كسور العظام: الاستخدام طويل الأمد قد يزيد الخطر (وقاية: كالسيوم + فيتامين D)
-• عدوى C. difficile: خطر بسيط لإسهال شديد
-
-📌 ملاحظة هامة: التحذيرات أعلاه موجودة أيضاً في جميع PPIs التقليدية
-(أوميبرازول، لانسوبرازول، بانتوبرازول)، وليست خاصة بـ Vonoprazan.
+Gastric Ulcer:
+  20 mg once daily
+  Duration: 8 weeks
 
 ════════════════════════════════════════════════════════════════
-🔄 التداخلات الدوائية
+WARNINGS & PRECAUTIONS
 ════════════════════════════════════════════════════════════════
 
-⚠️ تداخلات هامة:
-  ✗ Atazanavir - يقلل امتصاصه
-  ✗ Clopidogrel - يقلل فعاليته
-  ✗ Methotrexate - يزيد تركيزه
-  ✓ لا يتأثر بمثبطات CYP450 (أفضل من PPIs)
+• Pregnancy & Lactation: Use with caution (Category C)
+• Hepatic Impairment: Dose adjustment required
+• Renal Impairment: No dose adjustment needed
+• Elderly: Safe without adjustment
+
+Long-term Warnings (Common to all PPIs):
+• Hypomagnesemia: Monitor magnesium levels every 6 months
+• Vitamin B12 Deficiency: Annual testing for long-term users
+• Bone Fractures: Increased risk with prolonged use
+• C. difficile Infection: Risk of severe diarrhea
+
+NOTE: These warnings apply to ALL PPIs (omeprazole, lansoprazole, 
+pantoprazole), not specific to Vonoprazan.
 
 ════════════════════════════════════════════════════════════════
-📊 الأعراض الجانبية
+DRUG INTERACTIONS
 ════════════════════════════════════════════════════════════════
 
-شائعة (>5%):
-  • إسهال خفيف
-  • صداع
-  • غثيان
+Serious Interactions:
+  × Atazanavir - Reduces absorption by 70%
+  × Rilpivirine - Significantly reduces efficacy
+  × Nelfinavir - Reduces effectiveness
 
-نادرة (<1%):
-  • ارتفاع إنزيمات الكبد
-  • طفح جلدي
-  • نقص فيتامين B12
-
-════════════════════════════════════════════════════════════════
-🏆 المميزات الرئيسية
-════════════════════════════════════════════════════════════════
-
-✓ تثبيط أسرع للحمض (خلال ساعة واحدة)
-✓ تثبيط 24 ساعة مستمر
-✓ فعالية في وسط حمضي (لا يحتاج pH قلوي)
-✓ معدل استئصال H. pylori أعلى من PPIs (>90%)
-✓ جرعة واحدة يومياً
-✓ أمان أعلى مع كبار السن
-✓ لا يتأثر بالطعام أو وقت التناول
+Monitor:
+  • Clopidogrel - May reduce efficacy
+  • Methotrexate - May increase levels
+  • Warfarin - Monitor INR closely
 
 ════════════════════════════════════════════════════════════════
-📈 الدراسات السريرية
+ADVERSE EFFECTS
 ════════════════════════════════════════════════════════════════
 
-• K-CAB Study (2015): نسبة شفاء 92.8% بعد 4 أسابيع
-• NOVA Study (2020): تفوق على لانسوبرازول في GERD
-• معدل استئصال H. pylori: 93% (مقابل 75% للـPPIs)
+Common (>5%):
+  • Mild diarrhea
+  • Headache
+  • Nausea
+
+Rare (<1%):
+  • Elevated liver enzymes
+  • Skin rash
+  • Vitamin B12 deficiency
 
 ════════════════════════════════════════════════════════════════
-📞 معلومات الاتصال
+KEY ADVANTAGES
 ════════════════════════════════════════════════════════════════
 
-للاستفسارات الطبية أو طلب معلومات إضافية:
-يرجى الاتصال بالممثل الطبي المختص
+✓ Faster acid suppression (within 1 hour)
+✓ 24-hour sustained suppression
+✓ Effective in acidic environment
+✓ Higher H. pylori eradication rate (>90%)
+✓ Once-daily dosing
+✓ Higher safety in elderly
+✓ Not affected by food or timing
+
+════════════════════════════════════════════════════════════════
+CLINICAL STUDIES
+════════════════════════════════════════════════════════════════
+
+• K-CAB Study (2015): 92.8% healing rate after 4 weeks
+• NOVA Study (2020): Superior to lansoprazole in GERD
+• H. pylori eradication: 93% (vs. 75% for PPIs)
 
 ════════════════════════════════════════════════════════════════
 
-⚕️ ملاحظة مهمة:
-هذا الدليل للاستخدام الطبي المهني فقط. يجب صرف الدواء بوصفة طبية.
-للإبلاغ عن الأعراض الجانبية، يرجى التواصل مع هيئة الدواء.
+⚕️ IMPORTANT NOTE:
+This guide is for medical professionals only. Prescription required.
+For adverse event reporting, contact your local health authority.
 
 ════════════════════════════════════════════════════════════════
-            جميع الحقوق محفوظة © 2024
+                    © 2024 All Rights Reserved
 ════════════════════════════════════════════════════════════════
 """
     return content
 
 def create_download_button():
-    """إنشاء زر تحميل الملف الكامل"""
+    """Create download button for complete guide"""
     content = generate_pdf_content()
     
-    # تحويل المحتوى إلى bytes
+    # Convert to bytes with UTF-8 encoding
     b64 = base64.b64encode(content.encode('utf-8')).decode()
     
-    # إنشاء رابط التحميل
     filename = f"Vonoprazan_Guide_{datetime.now().strftime('%Y%m%d')}.txt"
     href = f'<a href="data:text/plain;charset=utf-8;base64,{b64}" download="{filename}" style="text-decoration: none;">'
     
@@ -318,8 +328,8 @@ def create_download_button():
         '<button style="'
         'background: linear-gradient(135deg, #2C5F8D 0%, #4A90C9 100%);'
         'color: white;'
-        'padding: 1rem 3rem;'
-        'font-size: 1.3rem;'
+        'padding: 0.8rem 2.5rem;'
+        'font-size: 1.1rem;'
         'font-weight: 600;'
         'border: none;'
         'border-radius: 10px;'
@@ -327,616 +337,602 @@ def create_download_button():
         'box-shadow: 0 4px 15px rgba(44, 95, 141, 0.3);'
         'transition: all 0.3s ease;'
         'display: block;'
-        'margin: 2rem auto;'
+        'margin: 1.5rem auto;'
         'width: fit-content;'
         '">'
-        '📥 تحميل الدليل الكامل (PDF/TXT)'
+        '📥 Download Complete Guide (TXT)'
         '</button></a>',
         unsafe_allow_html=True
     )
 
 # ========================================
-# العنوان الرئيسي
+# Main Header
 # ========================================
 st.markdown("""
-<div style='text-align: center; padding: 2rem; background: linear-gradient(135deg, #E8F4F8 0%, #FFFFFF 100%); border-radius: 15px; margin-bottom: 2rem; border: 2px solid #2C5F8D;'>
-    <h1 style='color: #2C5F8D; font-size: 3rem; margin: 0;'>💊 فونوبرازان</h1>
-    <h2 style='color: #4A90C9; font-size: 1.8rem; margin-top: 0.5rem; border: none;'>VONOPRAZAN - دليل طبي شامل</h2>
-    <p style='color: #666; font-size: 1.2rem; margin-top: 1rem;'>الجيل الجديد من مثبطات مضخة البروتون</p>
+<div style='text-align: center; padding: 1.5rem; background: linear-gradient(135deg, #E8F4F8 0%, #FFFFFF 100%); border-radius: 15px; margin-bottom: 2rem; border: 2px solid #2C5F8D;'>
+    <h1 style='color: #2C5F8D; font-size: 2.8rem; margin: 0; border: none;'>💊 VONOPRAZAN</h1>
+    <h2 style='color: #4A90C9; font-size: 1.6rem; margin-top: 0.5rem; border: none; padding: 0;'>Complete Medical Guide</h2>
+    <p style='color: #666; font-size: 1.1rem; margin-top: 1rem;'>Next Generation Potassium-Competitive Acid Blocker</p>
 </div>
 """, unsafe_allow_html=True)
 
-# زر التحميل في الأعلى
+# Download button at top
 create_download_button()
 
 st.markdown("---")
 
 # ========================================
-# الشريط الجانبي
+# Tabs Navigation
 # ========================================
-with st.sidebar:
-    st.markdown("""
-    <div style='text-align: center; padding: 1rem; background: linear-gradient(135deg, #2C5F8D 0%, #4A90C9 100%); border-radius: 10px; margin-bottom: 2rem;'>
-        <h2 style='color: white; margin: 0; border: none;'>📋 القائمة</h2>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    page = st.radio(
-        "اختر القسم:",
-        [
-            "📌 معلومات أساسية",
-            "🔬 آلية العمل",
-            "💊 الجرعات",
-            "⚠️ التحذيرات",
-            "🔄 التداخلات",
-            "📊 الأعراض الجانبية",
-            "🧮 حاسبة الجرعات"
-        ],
-        label_visibility="collapsed"
-    )
-    
-    st.markdown("---")
-    
-    st.markdown("""
-    <div style='background-color: #E8F4F8; padding: 1rem; border-radius: 8px; border-right: 4px solid #2C5F8D;'>
-        <p style='margin: 0; font-size: 1.1rem; color: #2C5F8D; font-weight: 600;'>
-            ℹ️ دليل طبي متخصص
-        </p>
-        <p style='margin-top: 0.5rem; font-size: 1rem; color: #666;'>
-            للاستخدام المهني فقط
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+    "📌 Overview",
+    "🔬 Mechanism",
+    "💊 Dosage",
+    "⚠️ Warnings",
+    "🔄 Interactions",
+    "📊 Side Effects",
+    "🧮 Dose Calculator"
+])
 
 # ========================================
-# المحتوى الرئيسي
+# TAB 1: Overview
 # ========================================
-
-# 📌 معلومات أساسية
-if page == "📌 معلومات أساسية":
-    st.header("📌 المعلومات الأساسية")
+with tab1:
+    st.header("📌 Overview")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        with st.expander("🏷️ التصنيف الدوائي", expanded=True):
+        with st.expander("🏷️ Drug Classification", expanded=True):
             st.info("""
-            **الاسم العلمي:** Vonoprazan  
-            **الاسم التجاري:** Voquezna, Vocinti  
-            **المجموعة:** مثبطات مضخة البروتون التنافسية (P-CAB)  
-            **الشركة المصنعة:** Takeda Pharmaceuticals
+            **Generic Name:** Vonoprazan  
+            **Trade Names:** Voquezna, Vocinti  
+            **Drug Class:** Potassium-Competitive Acid Blocker (P-CAB)  
+            **Manufacturer:** Takeda Pharmaceuticals
             """)
     
     with col2:
-        with st.expander("📅 معلومات الاعتماد", expanded=True):
+        with st.expander("📅 Approval Information", expanded=True):
             st.success("""
-            **اليابان:** 2015 (أول دولة)  
-            **FDA (أمريكا):** 2022  
-            **أوروبا:** قيد المراجعة  
-            **الدول العربية:** متوفر في بعض الدول
+            **Japan:** 2015 (First approval)  
+            **FDA (USA):** 2022  
+            **Europe:** Under review  
+            **Middle East:** Available in select countries
             """)
     
-    with st.expander("🎯 دواعي الاستعمال الرئيسية"):
+    with st.expander("🎯 Primary Indications"):
         st.markdown("""
-        ### الاستخدامات المعتمدة:
+        ### Approved Uses:
         
-        1. **ارتجاع المريء (GERD)** - خط علاجي أول ✅
-        2. **قرحة المعدة والاثني عشر** ✅
-        3. **استئصال جرثومة المعدة (H. pylori)** - مع المضادات الحيوية ✅
-        4. **متلازمة زولينجر-إليسون** ✅
-        5. **التهاب المريء التآكلي** ✅
-        6. **الوقاية من قرح الإجهاد** ✅
+        1. **Gastroesophageal Reflux Disease (GERD)** - First-line treatment ✅
+        2. **Gastric and Duodenal Ulcers** ✅
+        3. **H. pylori Eradication** - With antibiotics ✅
+        4. **Zollinger-Ellison Syndrome** ✅
+        5. **Erosive Esophagitis** ✅
+        6. **Stress Ulcer Prophylaxis** ✅
         """)
     
-    with st.expander("🏆 المميزات الرئيسية"):
+    with st.expander("🏆 Key Advantages"):
         st.markdown("""
-        | الميزة | التفاصيل |
-        |--------|----------|
-        | 🚀 **سرعة التأثير** | يبدأ خلال ساعة واحدة |
-        | ⏰ **مدة التأثير** | تثبيط 24 ساعة مستمر |
-        | 🎯 **الفعالية** | أقوى من PPIs التقليدية بـ 3 أضعاف |
-        | 🧪 **آلية العمل** | لا يحتاج لتفعيل حمضي |
-        | 💊 **الجرعة** | مرة واحدة يومياً |
-        | 🍽️ **التناول** | لا يتأثر بالطعام |
-        | 👴 **الأمان** | آمن لكبار السن |
-        | 🔬 **معدل النجاح** | >90% في استئصال H. pylori |
+        | Feature | Details |
+        |---------|---------|
+        | 🚀 **Speed of Action** | Starts within 1 hour |
+        | ⏰ **Duration** | 24-hour sustained suppression |
+        | 🎯 **Efficacy** | 3x stronger than traditional PPIs |
+        | 🧪 **Mechanism** | No acid activation required |
+        | 💊 **Dosing** | Once daily |
+        | 🍽️ **Administration** | Not affected by food |
+        | 👴 **Safety** | Safe for elderly |
+        | 🔬 **Success Rate** | >90% H. pylori eradication |
         """)
 
-# 🔬 آلية العمل
-elif page == "🔬 آلية العمل":
-    st.header("🔬 آلية العمل")
+# ========================================
+# TAB 2: Mechanism of Action
+# ========================================
+with tab2:
+    st.header("🔬 Mechanism of Action")
     
-    with st.expander("⚙️ كيف يعمل الدواء؟", expanded=True):
+    with st.expander("⚙️ How It Works", expanded=True):
         st.markdown("""
-        ### مثبط تنافسي لمضخة البروتون (P-CAB)
+        ### Potassium-Competitive Acid Blocker (P-CAB)
         
-        **على عكس مثبطات مضخة البروتون التقليدية (PPIs):**
+        **Unlike Traditional PPIs (e.g., omeprazole):**
         
-        #### PPIs التقليدية (مثل أوميبرازول):
-        1. تحتاج للتحول إلى الشكل النشط في وسط حمضي
-        2. ترتبط بشكل غير قابل للعكس (Irreversible)
-        3. تحتاج وقتاً أطول للبدء (2-3 أيام)
-        4. تتأثر بالطعام ووقت التناول
+        #### Traditional PPIs:
+        1. Need conversion to active form in acidic environment
+        2. Irreversible binding
+        3. Takes longer to start (2-3 days)
+        4. Affected by food and timing
         
         #### Vonoprazan (P-CAB):
-        ✅ يرتبط مباشرة بمضخة H⁺/K⁺-ATPase  
-        ✅ ارتباط تنافسي قابل للعكس (Reversible)  
-        ✅ يعمل فوراً بدون تفعيل  
-        ✅ فعال في أي pH  
-        ✅ لا يتأثر بالطعام
+        ✅ Direct binding to H⁺/K⁺-ATPase pump  
+        ✅ Reversible competitive binding  
+        ✅ Works immediately without activation  
+        ✅ Effective at any pH  
+        ✅ Not affected by food
         """)
     
-    with st.expander("🔬 التفاصيل الصيدلانية"):
+    with st.expander("🔬 Pharmacokinetics"):
         st.markdown("""
-        | الخاصية | القيمة |
-        |---------|--------|
-        | **الامتصاص** | سريع (Tmax = 1.5-2 ساعة) |
-        | **التوافر الحيوي** | >90% |
-        | **الارتباط بالبروتين** | 80% |
-        | **الأيض** | كبدي (CYP3A4, CYP2B6) |
-        | **نصف العمر** | 7-9 ساعات |
-        | **الإخراج** | بولي (70%)، براز (30%) |
+        | Property | Value |
+        |----------|-------|
+        | **Absorption** | Rapid (Tmax = 1.5-2 hours) |
+        | **Bioavailability** | >90% |
+        | **Protein Binding** | 80% |
+        | **Metabolism** | Hepatic (CYP3A4, CYP2B6) |
+        | **Half-life** | 7-9 hours |
+        | **Excretion** | Urine (70%), feces (30%) |
         """)
     
-    with st.expander("📊 مقارنة مع PPIs التقليدية"):
+    with st.expander("📊 Comparison with Traditional PPIs"):
         st.markdown("""
-        | المعيار | Vonoprazan | Omeprazole | Lansoprazole |
-        |---------|-----------|-----------|-------------|
-        | **بداية التأثير** | 1 ساعة | 2-3 أيام | 2-3 أيام |
-        | **مدة التثبيط** | 24 ساعة | 18 ساعة | 16 ساعة |
-        | **الفعالية** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
-        | **التأثر بالطعام** | لا | نعم | نعم |
-        | **استئصال H. pylori** | 93% | 75% | 78% |
-        | **الأمان** | عالي | متوسط | متوسط |
+        | Criterion | Vonoprazan | Omeprazole | Lansoprazole |
+        |-----------|-----------|-----------|-------------|
+        | **Onset** | 1 hour | 2-3 days | 2-3 days |
+        | **Duration** | 24 hours | 18 hours | 16 hours |
+        | **Efficacy** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
+        | **Food Effect** | No | Yes | Yes |
+        | **H. pylori Eradication** | 93% | 75% | 78% |
+        | **Safety** | High | Moderate | Moderate |
         """)
 
-# 💊 الجرعات
-elif page == "💊 الجرعات":
-    st.header("💊 الجرعات والاستخدام")
+# ========================================
+# TAB 3: Dosage
+# ========================================
+with tab3:
+    st.header("💊 Dosage & Administration")
     
-    with st.expander("🔵 ارتجاع المريء (GERD)", expanded=True):
+    with st.expander("🔵 GERD", expanded=True):
         st.markdown("""
-        ### الجرعة الأولية:
-        - **20 مجم** مرة واحدة يومياً
-        - **المدة:** 4-8 أسابيع
-        - **التوقيت:** في أي وقت (لا يتأثر بالطعام)
+        ### Initial Dose:
+        - **20 mg** once daily
+        - **Duration:** 4-8 weeks
+        - **Timing:** Any time (not affected by food)
         
-        ### جرعة الصيانة:
-        - **10-20 مجم** يومياً
-        - حسب شدة الأعراض واستجابة المريض
+        ### Maintenance:
+        - **10-20 mg** daily
+        - Based on symptom severity and response
         """)
     
-    with st.expander("🦠 استئصال جرثومة المعدة (H. pylori)"):
+    with st.expander("🦠 H. pylori Eradication"):
         st.markdown("""
-        ### العلاج الثلاثي:
+        ### Triple Therapy:
         
-        **Vonoprazan:** 20 مجم مرتين يومياً  
+        **Vonoprazan:** 20 mg twice daily  
         **+**  
-        **Amoxicillin:** 1000 مجم مرتين يومياً  
+        **Amoxicillin:** 1000 mg twice daily  
         **+**  
-        **Clarithromycin:** 500 مجم مرتين يومياً
+        **Clarithromycin:** 500 mg twice daily
         
-        **المدة:** 7 أيام
+        **Duration:** 7 days
         
         ---
         
-        ### نسبة النجاح:
+        ### Success Rate:
         - **Vonoprazan-based:** 93%
         - **PPI-based:** 75%
         
-        ⚠️ **هام:** التزام المريض بالجرعات ضروري لنجاح العلاج
+        ⚠️ **Important:** Patient compliance is critical for success
         """)
     
-    with st.expander("🔴 قرحة المعدة"):
+    with st.expander("🔴 Gastric Ulcer"):
         st.markdown("""
-        - **الجرعة:** 20 مجم مرة واحدة يومياً
-        - **المدة:** 8 أسابيع
-        - **المتابعة:** منظار بعد العلاج للتأكد من الشفاء
+        - **Dose:** 20 mg once daily
+        - **Duration:** 8 weeks
+        - **Follow-up:** Endoscopy after treatment to confirm healing
         """)
     
-    with st.expander("🟡 قرحة الاثني عشر"):
+    with st.expander("🟡 Duodenal Ulcer"):
         st.markdown("""
-        - **الجرعة:** 20 مجم مرة واحدة يومياً
-        - **المدة:** 6 أسابيع
-        - **شفاء أسرع** من PPIs التقليدية
+        - **Dose:** 20 mg once daily
+        - **Duration:** 6 weeks
+        - **Faster healing** than traditional PPIs
         """)
     
-    with st.expander("🟣 متلازمة زولينجر-إليسون"):
+    with st.expander("🟣 Zollinger-Ellison Syndrome"):
         st.markdown("""
-        - **الجرعة الأولية:** 20 مجم مرتين يومياً
-        - **التعديل:** حسب الاستجابة
-        - **الجرعة القصوى:** 40 مجم مرتين يومياً
+        - **Initial Dose:** 20 mg twice daily
+        - **Adjustment:** Based on response
+        - **Maximum:** 40 mg twice daily
         """)
     
-    with st.expander("⚙️ تعديل الجرعة في حالات خاصة"):
+    with st.expander("⚙️ Dose Adjustment in Special Populations"):
         st.markdown("""
-        | الحالة | التوصية |
-        |--------|----------|
-        | **الفشل الكلوي** | لا يحتاج تعديل ✅ |
-        | **الفشل الكبدي الخفيف** | لا يحتاج تعديل ✅ |
-        | **الفشل الكبدي المتوسط** | تقليل إلى 10 مجم ⚠️ |
-        | **الفشل الكبدي الشديد** | موانع استعمال ❌ |
-        | **كبار السن** | لا يحتاج تعديل ✅ |
-        | **الأطفال <12 سنة** | غير معتمد ❌ |
+        | Condition | Recommendation |
+        |-----------|----------------|
+        | **Renal Impairment** | No adjustment needed ✅ |
+        | **Mild Hepatic Impairment** | No adjustment needed ✅ |
+        | **Moderate Hepatic Impairment** | Reduce to 10 mg ⚠️ |
+        | **Severe Hepatic Impairment** | Contraindicated ❌ |
+        | **Elderly** | No adjustment needed ✅ |
+        | **Children <12 years** | Not approved ❌ |
         """)
 
-# ⚠️ التحذيرات
-elif page == "⚠️ التحذيرات":
-    st.header("⚠️ التحذيرات والاحتياطات")
+# ========================================
+# TAB 4: Warnings
+# ========================================
+with tab4:
+    st.header("⚠️ Warnings & Precautions")
     
-    with st.expander("🚫 موانع الاستعمال", expanded=True):
+    with st.expander("🚫 Contraindications", expanded=True):
         st.error("""
-        ### موانع مطلقة:
+        ### Absolute Contraindications:
         
-        ❌ **فرط الحساسية** للدواء أو أي من مكوناته  
-        ❌ **الاستخدام المتزامن مع Rilpivirine** (دواء HIV)  
-        ❌ **فشل كبدي شديد** (Child-Pugh C)
+        ❌ **Hypersensitivity** to the drug or any component  
+        ❌ **Concomitant use with Rilpivirine** (HIV drug)  
+        ❌ **Severe hepatic impairment** (Child-Pugh C)
         """)
     
-    with st.expander("🤰 الحمل والرضاعة"):
+    with st.expander("🤰 Pregnancy & Lactation"):
         st.warning("""
-        ### الحمل:
-        - **الفئة:** C (FDA)
-        - **التوصية:** استخدام فقط إذا كانت الفائدة تفوق المخاطر
-        - **لا توجد دراسات كافية** على الحوامل
+        ### Pregnancy:
+        - **Category:** C (FDA)
+        - **Recommendation:** Use only if benefits outweigh risks
+        - **Insufficient studies** in pregnant women
         
-        ### الرضاعة:
-        - **غير معروف** إذا كان يُفرز في حليب الأم
-        - **التوصية:** الحذر أو تجنب الاستخدام
-        - **البديل:** PPIs تقليدية أكثر أماناً (أوميبرازول)
+        ### Lactation:
+        - **Unknown** if excreted in breast milk
+        - **Recommendation:** Caution or avoid use
+        - **Alternative:** Traditional PPIs may be safer (omeprazole)
         """)
     
-    with st.expander("👴 كبار السن"):
+    with st.expander("👴 Elderly Patients"):
         st.info("""
-        ✅ **آمن** لكبار السن بدون تعديل جرعة  
-        ✅ تحمّل جيد  
-        ⚠️ **مراقبة:** نقص المغنيسيوم، فيتامين B12
+        ✅ **Safe** for elderly without dose adjustment  
+        ✅ Well tolerated  
+        ⚠️ **Monitor:** Magnesium, vitamin B12
         """)
     
-    with st.expander("⚕️ تحذيرات طبية هامة"):
+    with st.expander("⚕️ Important Medical Warnings"):
         st.markdown("""
-        ### 1. نقص المغنيسيوم:
-        - الاستخدام لأكثر من 3 أشهر قد يسبب نقص المغنيسيوم
-        - **الأعراض:** تشنجات عضلية، رجفة، عدم انتظام نبضات القلب
-        - **المراقبة:** فحص المغنيسيوم كل 6 أشهر
-        - 📘 **ملاحظة:** هذا العرض موجود أيضاً في جميع PPIs التقليدية
+        ### 1. Hypomagnesemia:
+        - Use >3 months may cause magnesium deficiency
+        - **Symptoms:** Muscle cramps, tremor, arrhythmias
+        - **Monitoring:** Check magnesium every 6 months
+        - 📘 **Note:** This occurs with ALL traditional PPIs
         
-        ### 2. نقص فيتامين B12:
-        - الاستخدام طويل الأمد (>سنة) قد يقلل امتصاص B12
-        - **الأعراض:** فقر الدم، تنميل، ضعف الذاكرة
-        - **الحل:** مكملات B12 إذا لزم الأمر
-        - 📘 **ملاحظة:** هذا العرض موجود أيضاً في جميع PPIs التقليدية
+        ### 2. Vitamin B12 Deficiency:
+        - Long-term use (>1 year) may reduce B12 absorption
+        - **Symptoms:** Anemia, numbness, memory impairment
+        - **Solution:** B12 supplements if needed
+        - 📘 **Note:** This occurs with ALL traditional PPIs
         
-        ### 3. كسور العظام:
-        - خطر طفيف لكسور الورك/معصم/عمود فقري
-        - خصوصاً مع الاستخدام طويل الأمد (>سنة)
-        - **الوقاية:** كالسيوم + فيتامين D
-        - 📘 **ملاحظة:** هذا العرض موجود أيضاً في جميع PPIs التقليدية
+        ### 3. Bone Fractures:
+        - Slight risk of hip/wrist/spine fractures
+        - Especially with prolonged use (>1 year)
+        - **Prevention:** Calcium + Vitamin D
+        - 📘 **Note:** This occurs with ALL traditional PPIs
         
-        ### 4. عدوى المطثيات العسيرة (C. difficile):
-        - خطر بسيط لإسهال شديد
-        - **الحذر** مع المرضى في المستشفيات
-        - 📘 **ملاحظة:** هذا العرض موجود أيضاً في جميع PPIs التقليدية
+        ### 4. C. difficile Infection:
+        - Small risk of severe diarrhea
+        - **Caution** in hospitalized patients
+        - 📘 **Note:** This occurs with ALL traditional PPIs
         
-        ### 5. مرض الكلى الخلالي الحاد:
-        - نادر جداً (<0.1%)
-        - **الأعراض:** حمى، طفح جلدي، ألم بالخصر
-        - **الإجراء:** إيقاف الدواء فوراً
-        - 📘 **ملاحظة:** هذا العرض موجود أيضاً في جميع PPIs التقليدية
+        ### 5. Acute Interstitial Nephritis:
+        - Very rare (<0.1%)
+        - **Symptoms:** Fever, rash, flank pain
+        - **Action:** Stop drug immediately
+        - 📘 **Note:** This occurs with ALL traditional PPIs
         """)
     
-    with st.expander("🔍 المراقبة المطلوبة"):
+    with st.expander("🔍 Required Monitoring"):
         st.markdown("""
-        | الفحص | التكرار | السبب |
-        |-------|---------|--------|
-        | **إنزيمات الكبد** | كل 6 أشهر | مراقبة الوظائف الكبدية |
-        | **مستوى المغنيسيوم** | كل 6 أشهر | تجنب النقص |
-        | **فيتامين B12** | سنوياً | تجنب فقر الدم |
-        | **كثافة العظام** | كل سنتين | تقليل خطر الكسور |
+        | Test | Frequency | Reason |
+        |------|-----------|--------|
+        | **Liver enzymes** | Every 6 months | Monitor hepatic function |
+        | **Magnesium level** | Every 6 months | Prevent deficiency |
+        | **Vitamin B12** | Annually | Prevent anemia |
+        | **Bone density** | Every 2 years | Reduce fracture risk |
         """)
 
-# 🔄 التداخلات
-elif page == "🔄 التداخلات":
-    st.header("🔄 التداخلات الدوائية")
+# ========================================
+# TAB 5: Drug Interactions
+# ========================================
+with tab5:
+    st.header("🔄 Drug Interactions")
     
-    with st.expander("❌ تداخلات خطيرة (ممنوعة)", expanded=True):
+    with st.expander("❌ Serious Interactions (Avoid)", expanded=True):
         st.error("""
-        ### أدوية يجب تجنبها:
+        ### Drugs to Avoid:
         
-        | الدواء | السبب | البديل |
-        |--------|-------|--------|
-        | **Rilpivirine** | يقلل فعاليته بشكل حاد | استخدام PPI آخر |
-        | **Atazanavir** | يقلل امتصاصه بنسبة 70% | ممنوع الاستخدام معه |
-        | **Nelfinavir** | يقلل فعاليته | استشر طبيب الأمراض المعدية |
+        | Drug | Reason | Alternative |
+        |------|--------|-------------|
+        | **Rilpivirine** | Severely reduces efficacy | Use another PPI |
+        | **Atazanavir** | Reduces absorption by 70% | Do not use together |
+        | **Nelfinavir** | Reduces effectiveness | Consult ID specialist |
         """)
     
-    with st.expander("⚠️ تداخلات متوسطة (حذر)"):
+    with st.expander("⚠️ Moderate Interactions (Monitor)"):
         st.warning("""
-        ### أدوية تحتاج مراقبة:
+        ### Drugs Requiring Monitoring:
         
         #### 1. Clopidogrel (Plavix):
-        - Vonoprazan قد يقلل فعاليته
-        - **الحل:** استخدام مثبط حمض آخر أو مراقبة دقيقة
+        - Vonoprazan may reduce effectiveness
+        - **Solution:** Use different acid suppressor or monitor closely
         
         #### 2. Methotrexate:
-        - قد يزيد تركيزه في الدم (خطر السمية)
-        - **الإجراء:** مراقبة مستوى Methotrexate، تقليل الجرعة
+        - May increase blood levels (toxicity risk)
+        - **Action:** Monitor methotrexate levels, reduce dose
         
         #### 3. Warfarin:
-        - قد يزيد تأثيره (خطر النزيف)
-        - **المراقبة:** INR كل أسبوع في البداية
+        - May increase effect (bleeding risk)
+        - **Monitoring:** INR weekly initially
         
         #### 4. Digoxin:
-        - قد يزيد تركيزه
-        - **المراقبة:** مستوى Digoxin في الدم
+        - May increase levels
+        - **Monitoring:** Digoxin blood levels
         
         #### 5. Tacrolimus:
-        - قد يزيد تركيزه
-        - **المراقبة:** مستويات Tacrolimus
+        - May increase levels
+        - **Monitoring:** Tacrolimus levels
         """)
     
-    with st.expander("✅ تداخلات طفيفة (آمنة)"):
+    with st.expander("✅ Minor Interactions (Safe)"):
         st.success("""
-        ### أدوية آمنة للاستخدام معها:
+        ### Safe to Use:
         
-        ✅ مسكنات الألم (Paracetamol, Ibuprofen)  
-        ✅ أدوية الضغط (معظمها)  
-        ✅ أدوية السكري (Metformin, Insulin)  
-        ✅ مضادات حيوية (معظمها)  
-        ✅ مضادات الهيستامين  
-        ✅ أدوية الربو  
+        ✅ Pain relievers (Paracetamol, Ibuprofen)  
+        ✅ Blood pressure medications (most)  
+        ✅ Diabetes medications (Metformin, Insulin)  
+        ✅ Antibiotics (most)  
+        ✅ Antihistamines  
+        ✅ Asthma medications  
         """)
     
-    with st.expander("🍽️ التداخلات مع الطعام"):
+    with st.expander("🍽️ Food Interactions"):
         st.info("""
-        ### ميزة رئيسية:
+        ### Major Advantage:
         
-        ✅ **لا يتأثر بالطعام** - يمكن تناوله قبل أو بعد أو مع الأكل  
-        ✅ **لا يتأثر بالقهوة** أو المشروبات الحمضية  
-        ✅ **لا يتأثر بعصير الجريب فروت** (على عكس بعض PPIs)
+        ✅ **Not affected by food** - Can take before, after, or with meals  
+        ✅ **Not affected by coffee** or acidic beverages  
+        ✅ **Not affected by grapefruit juice** (unlike some PPIs)
         
         ---
         
-        **ملاحظة:** هذه ميزة كبيرة مقارنة بـ PPIs التقليدية التي يجب تناولها على معدة فارغة
+        **Note:** This is a major advantage over traditional PPIs that must be taken on empty stomach
         """)
     
-    with st.expander("💊 التداخل مع الأدوية التي تحتاج حموضة للامتصاص"):
+    with st.expander("💊 Drugs Requiring Acidic Environment"):
         st.markdown("""
-        | الدواء | التأثير | الحل |
-        |--------|---------|------|
-        | **Ketoconazole** | يقلل امتصاصه | تناوله قبل Vonoprazan بساعتين |
-        | **Itraconazole** | يقلل امتصاصه | نفس الأعلى |
-        | **Erlotinib** | يقلل فعاليته | تجنب الاستخدام معاً |
-        | **Iron supplements** | يقلل امتصاصها | فاصل زمني 2-3 ساعات |
+        | Drug | Effect | Solution |
+        |------|--------|----------|
+        | **Ketoconazole** | Reduced absorption | Take 2 hours before Vonoprazan |
+        | **Itraconazole** | Reduced absorption | Same as above |
+        | **Erlotinib** | Reduced efficacy | Avoid combination |
+        | **Iron supplements** | Reduced absorption | Separate by 2-3 hours |
         """)
 
-# 📊 الأعراض الجانبية
-elif page == "📊 الأعراض الجانبية":
-    st.header("📊 الأعراض الجانبية")
+# ========================================
+# TAB 6: Side Effects
+# ========================================
+with tab6:
+    st.header("📊 Adverse Effects")
     
-    with st.expander("✅ شائعة جداً (>10%)", expanded=True):
+    with st.expander("✅ Very Common (>10%)", expanded=True):
         st.info("""
-        ### أعراض خفيفة ومؤقتة:
+        ### Mild and Transient:
         
-        - **صداع خفيف** (12%)
-        - **إسهال طفيف** (10-15%)
+        - **Mild headache** (12%)
+        - **Mild diarrhea** (10-15%)
         
-        **عادة تختفي خلال 3-5 أيام**
+        **Usually resolve within 3-5 days**
         """)
     
-    with st.expander("🟡 شائعة (1-10%)"):
+    with st.expander("🟡 Common (1-10%)"):
         st.warning("""
-        - **غثيان** (5%)
-        - **آلام البطن** (3%)
-        - **إمساك** (2%)
-        - **انتفاخ** (2%)
-        - **دوخة خفيفة** (1%)
+        - **Nausea** (5%)
+        - **Abdominal pain** (3%)
+        - **Constipation** (2%)
+        - **Bloating** (2%)
+        - **Mild dizziness** (1%)
         """)
     
-    with st.expander("🟠 غير شائعة (0.1-1%)"):
+    with st.expander("🟠 Uncommon (0.1-1%)"):
         st.markdown("""
-        - ارتفاع إنزيمات الكبد (عابر)
-        - طفح جلدي خفيف
-        - حكة
-        - جفاف الفم
-        - تغير في حاسة التذوق
+        - Elevated liver enzymes (transient)
+        - Mild skin rash
+        - Itching
+        - Dry mouth
+        - Taste alteration
         """)
     
-    with st.expander("🔴 نادرة جداً (<0.1%)"):
+    with st.expander("🔴 Rare (<0.1%)"):
         st.error("""
-        ### أعراض جانبية خطيرة (نادرة):
+        ### Serious Adverse Effects (Rare):
         
-        ❗ **التهاب البنكرياس الحاد**  
-        ❗ **فرط الحساسية الشديد** (Anaphylaxis)  
-        ❗ **التهاب الكبد الدوائي**  
-        ❗ **نقص الصفائح الدموية**  
-        ❗ **التهاب الكلى الخلالي**
+        ❗ **Acute pancreatitis**  
+        ❗ **Severe hypersensitivity** (Anaphylaxis)  
+        ❗ **Drug-induced hepatitis**  
+        ❗ **Thrombocytopenia**  
+        ❗ **Acute interstitial nephritis**
         
-        **⚠️ إذا ظهرت أي من هذه الأعراض، أوقف الدواء فوراً واتصل بالطبيب**
+        **⚠️ If any of these occur, stop the drug immediately and contact physician**
         """)
     
-    with st.expander("📊 مقارنة الأمان مع PPIs أخرى"):
+    with st.expander("📊 Safety Comparison with Other PPIs"):
         st.markdown("""
-        | العرض الجانبي | Vonoprazan | Omeprazole | Lansoprazole |
-        |---------------|-----------|-----------|-------------|
-        | **صداع** | 12% | 18% | 20% |
-        | **إسهال** | 10% | 15% | 12% |
-        | **غثيان** | 5% | 8% | 7% |
-        | **ارتفاع إنزيمات الكبد** | 0.5% | 1% | 1.2% |
-        | **التقييم العام** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+        | Adverse Effect | Vonoprazan | Omeprazole | Lansoprazole |
+        |----------------|-----------|-----------|-------------|
+        | **Headache** | 12% | 18% | 20% |
+        | **Diarrhea** | 10% | 15% | 12% |
+        | **Nausea** | 5% | 8% | 7% |
+        | **Elevated liver enzymes** | 0.5% | 1% | 1.2% |
+        | **Overall Rating** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
         
-        **النتيجة:** Vonoprazan أقل في الأعراض الجانبية من PPIs التقليدية ✅
+        **Result:** Vonoprazan has fewer adverse effects than traditional PPIs ✅
         """)
     
-    with st.expander("🩺 متى يجب إيقاف الدواء؟"):
+    with st.expander("🩺 When to Stop the Drug"):
         st.error("""
-        ### أوقف الدواء فوراً واتصل بالطبيب إذا ظهر:
+        ### Stop Immediately and Contact Physician if:
         
-        🚨 **طفح جلدي شديد** أو تورم في الوجه/اللسان  
-        🚨 **ألم شديد في البطن** مع حمى  
-        🚨 **اصفرار الجلد أو العينين** (يرقان)  
-        🚨 **بول داكن** أو براز شاحب  
-        🚨 **نزيف غير مبرر** أو كدمات  
-        🚨 **إسهال مائي شديد** (>5 مرات يومياً)  
-        🚨 **ألم في الصدر** أو صعوبة تنفس
+        🚨 **Severe skin rash** or facial/tongue swelling  
+        🚨 **Severe abdominal pain** with fever  
+        🚨 **Jaundice** (yellowing of skin/eyes)  
+        🚨 **Dark urine** or pale stools  
+        🚨 **Unexplained bleeding** or bruising  
+        🚨 **Severe watery diarrhea** (>5 times daily)  
+        🚨 **Chest pain** or difficulty breathing
         """)
 
-# 🧮 حاسبة الجرعات
-elif page == "🧮 حاسبة الجرعات":
-    st.header("🧮 حاسبة الجرعات الذكية")
+# ========================================
+# TAB 7: Dose Calculator
+# ========================================
+with tab7:
+    st.header("🧮 Dose Calculator")
     
-    st.info("⚕️ **ملاحظة:** هذه الحاسبة للإرشاد فقط. الجرعة النهائية يحددها الطبيب المعالج.")
+    st.info("⚕️ **Note:** This calculator is for guidance only. Final dosing should be determined by the treating physician.")
     
-    with st.expander("⚙️ أدخل بيانات المريض", expanded=True):
+    with st.expander("⚙️ Enter Patient Data", expanded=True):
         col1, col2 = st.columns(2)
         
         with col1:
             indication = st.selectbox(
-                "دواعي الاستعمال:",
+                "Indication:",
                 [
-                    "ارتجاع المريء (GERD)",
-                    "قرحة المعدة",
-                    "قرحة الاثني عشر",
-                    "استئصال H. pylori",
-                    "متلازمة زولينجر-إليسون"
+                    "GERD",
+                    "Gastric Ulcer",
+                    "Duodenal Ulcer",
+                    "H. pylori Eradication",
+                    "Zollinger-Ellison Syndrome"
                 ]
             )
             
-            age = st.number_input("عمر المريض (سنة):", min_value=1, max_value=120, value=45)
+            age = st.number_input("Patient Age (years):", min_value=1, max_value=120, value=45)
             
-            weight = st.number_input("الوزن (كجم):", min_value=20, max_value=200, value=70)
+            weight = st.number_input("Weight (kg):", min_value=20, max_value=200, value=70)
         
         with col2:
             liver = st.selectbox(
-                "وظائف الكبد:",
-                ["طبيعية", "فشل خفيف", "فشل متوسط", "فشل شديد"]
+                "Hepatic Function:",
+                ["Normal", "Mild Impairment", "Moderate Impairment", "Severe Impairment"]
             )
             
             kidney = st.selectbox(
-                "وظائف الكلى:",
-                ["طبيعية", "فشل خفيف", "فشل متوسط", "فشل شديد"]
+                "Renal Function:",
+                ["Normal", "Mild Impairment", "Moderate Impairment", "Severe Impairment"]
             )
             
             duration = st.selectbox(
-                "مدة العلاج المتوقعة:",
-                ["أقل من شهر", "1-3 أشهر", "3-6 أشهر", "أكثر من 6 أشهر"]
+                "Expected Treatment Duration:",
+                ["<1 month", "1-3 months", "3-6 months", ">6 months"]
             )
     
-    if st.button("🔍 احسب الجرعة المناسبة", type="primary"):
+    if st.button("🔍 Calculate Recommended Dose", type="primary"):
         st.markdown("---")
-        st.subheader("📋 التوصيات العلاجية:")
+        st.subheader("📋 Treatment Recommendation:")
         
-        # منطق حساب الجرعة
+        # Dosing logic
         if age < 12:
-            st.error("❌ **غير معتمد للأطفال أقل من 12 سنة**")
-        elif liver == "فشل شديد":
-            st.error("❌ **موانع استعمال في حالة الفشل الكبدي الشديد**")
+            st.error("❌ **Not approved for children <12 years**")
+        elif liver == "Severe Impairment":
+            st.error("❌ **Contraindicated in severe hepatic impairment**")
         else:
-            # حساب الجرعة حسب دواعي الاستعمال
-            if indication == "ارتجاع المريء (GERD)":
-                if liver == "فشل متوسط":
-                    dose = "10 مجم"
-                    frequency = "مرة واحدة يومياً"
+            # Calculate dose based on indication
+            if indication == "GERD":
+                if liver == "Moderate Impairment":
+                    dose = "10 mg"
+                    frequency = "once daily"
                 else:
-                    dose = "20 مجم"
-                    frequency = "مرة واحدة يومياً"
-                period = "4-8 أسابيع"
+                    dose = "20 mg"
+                    frequency = "once daily"
+                period = "4-8 weeks"
                 
-            elif indication == "استئصال H. pylori":
-                dose = "20 مجم"
-                frequency = "مرتين يومياً"
-                period = "7 أيام"
+            elif indication == "H. pylori Eradication":
+                dose = "20 mg"
+                frequency = "twice daily"
+                period = "7 days"
                 additional = """
-                **بالإضافة إلى:**
-                - Amoxicillin 1000 مجم مرتين يومياً
-                - Clarithromycin 500 مجم مرتين يومياً
+                **In combination with:**
+                - Amoxicillin 1000 mg twice daily
+                - Clarithromycin 500 mg twice daily
                 """
                 
-            elif indication == "قرحة المعدة":
-                dose = "20 مجم"
-                frequency = "مرة واحدة يومياً"
-                period = "8 أسابيع"
+            elif indication == "Gastric Ulcer":
+                dose = "20 mg"
+                frequency = "once daily"
+                period = "8 weeks"
                 
-            elif indication == "قرحة الاثني عشر":
-                dose = "20 مجم"
-                frequency = "مرة واحدة يومياً"
-                period = "6 أسابيع"
+            elif indication == "Duodenal Ulcer":
+                dose = "20 mg"
+                frequency = "once daily"
+                period = "6 weeks"
                 
-            elif indication == "متلازمة زولينجر-إليسون":
-                dose = "20 مجم"
-                frequency = "مرتين يومياً (قد تزيد إلى 40 مجم مرتين)"
-                period = "حسب الاستجابة"
+            elif indication == "Zollinger-Ellison Syndrome":
+                dose = "20 mg"
+                frequency = "twice daily (may increase to 40 mg twice daily)"
+                period = "based on response"
             
-            # عرض النتائج
+            # Display results
             col1, col2, col3 = st.columns(3)
             
             with col1:
                 st.success(f"""
-                ### 💊 الجرعة
+                ### 💊 Dose
                 **{dose}**
                 """)
             
             with col2:
                 st.info(f"""
-                ### ⏰ التكرار
+                ### ⏰ Frequency
                 **{frequency}**
                 """)
             
             with col3:
                 st.warning(f"""
-                ### 📅 المدة
+                ### 📅 Duration
                 **{period}**
                 """)
             
             st.markdown("---")
             
-            # تعليمات إضافية
-            with st.expander("📝 تعليمات مهمة للمريض", expanded=True):
+            # Additional instructions
+            with st.expander("📝 Important Instructions for Patient", expanded=True):
                 instructions = f"""
-                ### طريقة التناول:
-                ✅ يمكن تناوله في **أي وقت** (لا يتأثر بالطعام)  
-                ✅ ابتلع القرص **كاملاً** مع الماء  
-                ✅ **لا تكسر** أو تمضغ القرص  
+                ### Administration:
+                ✅ Can be taken **any time** (not affected by food)  
+                ✅ Swallow tablet **whole** with water  
+                ✅ **Do not crush** or chew  
                 
-                ### المتابعة:
+                ### Follow-up:
                 """
                 
-                if indication == "استئصال H. pylori":
+                if indication == "H. pylori Eradication":
                     instructions += """
-                    🔬 فحص H. pylori بعد 4 أسابيع من انتهاء العلاج  
+                    🔬 Test for H. pylori 4 weeks after completing treatment  
                     """
                     st.markdown(instructions)
                     st.info(additional)
                 else:
                     st.markdown(instructions)
                 
-                if duration in ["3-6 أشهر", "أكثر من 6 أشهر"]:
+                if duration in ["3-6 months", ">6 months"]:
                     st.warning("""
-                    ### ⚠️ فحوصات دورية مطلوبة:
-                    - فحص المغنيسيوم كل 6 أشهر
-                    - فحص فيتامين B12 سنوياً
-                    - إنزيمات الكبد كل 6 أشهر
+                    ### ⚠️ Periodic Testing Required:
+                    - Magnesium levels every 6 months
+                    - Vitamin B12 annually
+                    - Liver enzymes every 6 months
                     """)
             
-            # تحذيرات خاصة
+            # Special warnings
             warnings = []
             
-            if liver == "فشل متوسط":
-                warnings.append("⚠️ **جرعة مخفضة** بسبب القصور الكبدي")
+            if liver == "Moderate Impairment":
+                warnings.append("⚠️ **Reduced dose** due to hepatic impairment")
             
             if age > 65:
-                warnings.append("ℹ️ **مراقبة دقيقة** لكبار السن (خطر نقص المغنيسيوم)")
+                warnings.append("ℹ️ **Close monitoring** in elderly (risk of hypomagnesemia)")
             
-            if duration in ["3-6 أشهر", "أكثر من 6 أشهر"]:
-                warnings.append("⚠️ **استخدام طويل الأمد**: راقب كثافة العظام وفيتامين B12")
+            if duration in ["3-6 months", ">6 months"]:
+                warnings.append("⚠️ **Long-term use**: Monitor bone density and vitamin B12")
             
             if warnings:
-                st.markdown("### ⚠️ تنبيهات:")
+                st.markdown("### ⚠️ Alerts:")
                 for warning in warnings:
                     st.warning(warning)
 
 # ========================================
-# التذييل
+# Footer
 # ========================================
 st.markdown("---")
 
@@ -944,42 +940,42 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown("""
-    <div style='text-align: center; background-color: #E8F4F8; padding: 1.5rem; border-radius: 8px;'>
-        <h3 style='color: #2C5F8D; margin: 0;'>📞 الدعم الطبي</h3>
-        <p style='margin-top: 0.5rem; font-size: 1.1rem;'>متاح 24/7</p>
+    <div style='text-align: center; background-color: #E8F4F8; padding: 1.2rem; border-radius: 8px;'>
+        <h3 style='color: #2C5F8D; margin: 0; font-size: 1.3rem;'>📞 Medical Support</h3>
+        <p style='margin-top: 0.5rem; font-size: 1rem;'>Available 24/7</p>
     </div>
     """, unsafe_allow_html=True)
 
 with col2:
     st.markdown("""
-    <div style='text-align: center; background-color: #E8F4F8; padding: 1.5rem; border-radius: 8px;'>
-        <h3 style='color: #2C5F8D; margin: 0;'>📚 مراجع علمية</h3>
-        <p style='margin-top: 0.5rem; font-size: 1.1rem;'>محدثة 2024</p>
+    <div style='text-align: center; background-color: #E8F4F8; padding: 1.2rem; border-radius: 8px;'>
+        <h3 style='color: #2C5F8D; margin: 0; font-size: 1.3rem;'>📚 References</h3>
+        <p style='margin-top: 0.5rem; font-size: 1rem;'>Updated 2024</p>
     </div>
     """, unsafe_allow_html=True)
 
 with col3:
     st.markdown("""
-    <div style='text-align: center; background-color: #E8F4F8; padding: 1.5rem; border-radius: 8px;'>
-        <h3 style='color: #2C5F8D; margin: 0;'>⚕️ للمتخصصين</h3>
-        <p style='margin-top: 0.5rem; font-size: 1.1rem;'>فقط</p>
+    <div style='text-align: center; background-color: #E8F4F8; padding: 1.2rem; border-radius: 8px;'>
+        <h3 style='color: #2C5F8D; margin: 0; font-size: 1.3rem;'>⚕️ For Professionals</h3>
+        <p style='margin-top: 0.5rem; font-size: 1rem;'>Only</p>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# زر التحميل في الأسفل أيضاً
-st.markdown("### 📥 احفظ نسخة من الدليل:")
+# Download button at bottom
+st.markdown("### 📥 Save a Copy:")
 create_download_button()
 
 st.markdown("""
-<div style='text-align: center; padding: 2rem; margin-top: 3rem; border-top: 2px solid #E8F4F8;'>
-    <p style='color: #666; font-size: 1rem;'>
-        ⚕️ <strong>هذا الدليل للاستخدام الطبي المهني فقط</strong><br>
-        يجب صرف الدواء بوصفة طبية معتمدة
+<div style='text-align: center; padding: 1.5rem; margin-top: 2rem; border-top: 2px solid #E8F4F8;'>
+    <p style='color: #666; font-size: 0.95rem;'>
+        ⚕️ <strong>This guide is for medical professionals only</strong><br>
+        Prescription required for dispensing
     </p>
-    <p style='color: #999; font-size: 0.9rem; margin-top: 1rem;'>
-        © 2024 - جميع الحقوق محفوظة
+    <p style='color: #999; font-size: 0.85rem; margin-top: 1rem;'>
+        © 2024 - All Rights Reserved
     </p>
 </div>
 """, unsafe_allow_html=True)
